@@ -42,7 +42,10 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not arg:
                 raise SyntaxError()
-            my_list = arg.split(" ")
+            my_list = shlex.split(arg)
+            class_name = my_list[0]
+            if class_name not in self.cls_map:
+                raise NameError()
             kwargs = {}
             for i in range(1, len(my_list)):
                 k, v = tuple(my_list[i].split("="))
@@ -55,9 +58,9 @@ class HBNBCommand(cmd.Cmd):
                         continue
                 kwargs[k] = v
             if kwargs == {}:
-                new_instance = eval(mylist[0])()
+                new_instance = eval(self.cls_map[class_name])()
             else:
-                new_instance = eval(my_list[0])(**kwargs)
+                new_instance = eval(self.cls_map[class_name])(**kwargs)
                 storage.new(new_instance)
             print(new_instance.id)
             new_instance.save()
