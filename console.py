@@ -58,9 +58,9 @@ class HBNBCommand(cmd.Cmd):
                         continue
                 kwargs[k] = v
             if kwargs == {}:
-                new_instance = eval(self.cls_map[class_name])()
+                new_instance = self.cls_map[class_name]()
             else:
-                new_instance = eval(self.cls_map[class_name])(**kwargs)
+                new_instance = self.cls_map[class_name](**kwargs)
                 storage.new(new_instance)
             print(new_instance.id)
             new_instance.save()
