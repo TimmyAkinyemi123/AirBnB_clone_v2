@@ -19,7 +19,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
     cls_map = {
             "BaseModel": BaseModel, "User": User,
-            "City": City, "State": State, "City": City,
+            "State": State, "City": City,
             "Amenity": Amenity, "Place": Place, "Review": Review
             }
 
