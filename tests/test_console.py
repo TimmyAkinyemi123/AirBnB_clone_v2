@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """
-This test files holds all the tests needed to test the console application
-"""
-import unittest
+ii"""
 from unittest.mock import patch
 from console import HBNBCommand
 from io import StringIO
