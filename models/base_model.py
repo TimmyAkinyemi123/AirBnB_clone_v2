@@ -45,6 +45,11 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
+    def __str__(self):
+    """Return the print/str representation of the BaseModel instance."""
+    attributes = ", ".join(f"'{k}': '{v}'" for k, v in self.to_dict().items())
+    return f"[{type(self).__name__}] ({self.id}) {{{attributes}}}"
+
     def to_dict(self):
         """Return a dictionary representation of the BaseModel instance.
         Includes the key/value pair __class__ representing
