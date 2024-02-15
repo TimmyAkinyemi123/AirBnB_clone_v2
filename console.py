@@ -42,29 +42,22 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not arg:
                 raise SyntaxError()
-            my_list = shlex.split(arg)
-            class_name = my_list[0]
+            tokens = arg.split(' ')
+            class_name = tokens[0]
             if class_name not in self.cls_map:
                 raise NameError()
             kwargs = {}
-            for i in range(1, len(my_list)):
-                k, v = tuple(my_list[i].split("="))
-                if v[0] == '"':
-                    v = v.strip('"').replace("_", " ")
-                else:
-                    try:
-                        v = eval(v)
-                    except (SyntaxError, NameError):
-                        continue
-                kwargs[k] = v
-            if kwargs == {}:
-                new_instance = self.cls_map[class_name]()
-            else:
-                new_instance = self.cls_map[class_name](**kwargs)
-                storage.new(new_instance)
+            for token in tokens[1:]:
+                if '=' in token:
+                    k, v = token.split('=')
+                    if v.startswith('"') and v.endswith('"'):
+                        v = v[1:-1]
+                        v = v.replace("_", " ")
+                    kwargs[k] = v
+            new_instance = self.cls_map[class_name](**kwargs)
+            storage.new(new_instance)
             print(new_instance.id)
             new_instance.save()
-
         except SyntaxError:
             print("** class name is missing **")
         except NameError:
