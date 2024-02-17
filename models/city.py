@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" City Module for HBNB project """
+""" Defines the City class """
 from models.base_model import BaseModel
 from models.base_model import Base
 from sqlalchemy import Column

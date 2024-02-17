@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" State module for HBNB project"""
+""" Defines the State module"""
 from os import environ
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
@@ -10,9 +10,9 @@ class State(BaseModel, Base):
     """ Represents a state for a MySQL database.
         inherits from SQLAlchemy Base and links to the MySQL table states.
         Attributes:
-            __tablename__ (str): The name pf the MySQL table to store cities.
-            name (sqlalchemy String): The name of the state.
-            state_id: (sqlalchemy String): The state id of the state
+            __tablename__ (str): name of the MySQL table to store states.
+            name (sqlalchemy String): state name
+            state_id: (sqlalchemy String): state id
     """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
