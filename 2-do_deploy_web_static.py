@@ -5,7 +5,7 @@ import os.path
 
 env.user = 'ubuntu'
 env.hosts = ["54.236.8.114", "100.25.167.153"]
-env.key_filename = "~/id_rsa"
+env.key_filename = "~/.ssh/school"
 
 
 def do_deploy(archive_path):
