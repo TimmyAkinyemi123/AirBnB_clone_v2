@@ -19,16 +19,17 @@ class State(BaseModel, Base):
 
     """ For DBStorage """
     if environ['HBNB_TYPE_STORAGE'] == 'db':
-        cities = relationship("City", backref="state", cascade="all, delete-orphan")
+        cities = relationship(
+                "City", backref="state", cascade="all, delete-orphan")
 
     # For FileStorage """
     else:
         @property
         def cities(self):
             """
-	       Getter attribute that returns list of city instances
-               with state_id equals to the current State_id
-	    """
+            Getter attribute that returns list of city instances
+            with state_id equals to the current State_i
+            """
             from models.city import City
             from models import storage
 
