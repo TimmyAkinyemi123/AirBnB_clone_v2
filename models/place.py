@@ -13,9 +13,6 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
 
 association_table = Table("place_amenity", Base.metadata,
                           Column("place_id", String(60),
@@ -24,7 +21,6 @@ association_table = Table("place_amenity", Base.metadata,
                           Column("amenity_id", String(60),
                                  ForeignKey("amenities.id"),
                                  primary_key=True, nullable=False))
-
 
 class Place(BaseModel, Base):
     """Represents a Place for a MySQL database.
@@ -62,15 +58,6 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
-        @property
-        def reviews(self):
-            """Get a list of all linked Reviews."""
-            review_list = []
-            for review in list(models.storage.all(Review).values()):
-                if review.place_id == self.id:
-                    review_list.append(review)
-            return review_list
-
         @property
         def amenities(self):
             """Get/set linked Amenities."""
