@@ -1,8 +1,6 @@
 #!/usr/bin/python3
-"""web server distribution
-    """
+"""web server distribution"""
 from fabric.api import *
-import tarfile
 import os.path
 import re
 from datetime import datetime
@@ -13,43 +11,40 @@ env.key_filename = "~/.ssh/school"
 
 
 def do_pack():
-    """distributes an archive to your web servers
-    """
-    target = local("mkdir -p ./versions")
-    name = str(datetime.now()).replace(" ", '')
-    opt = re.sub(r'[^\w\s]', '', name)
-    tar = local('tar -cvzf versions/web_static_{}.tgz web_static'.format(opt))
-    if os.path.exists("./versions/web_static_{}.tgz".format(opt)):
-        return os.path.normpath("./versions/web_static_{}.tgz".format(opt))
-    else:
+    """Creates an archive of the web_static directory"""
+    local("mkdir -p versions")
+    dt = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    archive_path = f'versions/web_static_{dt}.tgz'
+    result = local(f'tar -cvzf {archive_path} web_static')
+    if result.failed:
         return None
+    return archive_path
 
 
 def do_deploy(archive_path):
-    """distributes an archive to your web servers
-    """
-    if os.path.exists(archive_path) is False:
+    """Deploys an archive to web servers"""
+    if not os.path.exists(archive_path):
         return False
     try:
-        arc = archive_path.split("/")
-        base = arc[1].strip('.tgz')
+        file_name = os.path.basename(archive_path)
+        name_no_ext = file_name.split(".")[0]
+        release_path = f"/data/web_static/releases/{name_no_ext}"
+        
         put(archive_path, '/tmp/')
-        sudo('mkdir -p /data/web_static/releases/{}'.format(base))
-        main = "/data/web_static/releases/{}".format(base)
-        sudo('tar -xzf /tmp/{} -C {}/'.format(arc[1], main))
-        sudo('rm /tmp/{}'.format(arc[1]))
-        sudo('mv {}/web_static/* {}/'.format(main, main))
+        sudo(f'mkdir -p {release_path}')
+        sudo(f'tar -xzf /tmp/{file_name} -C {release_path}')
+        sudo(f'rm /tmp/{file_name}')
+        sudo(f'mv {release_path}/web_static/* {release_path}')
         sudo('rm -rf /data/web_static/current')
-        sudo('ln -s {}/ "/data/web_static/current"'.format(main))
+        sudo(f'ln -s {release_path} /data/web_static/current')
         return True
-    except:
+    except Exception:
         return False
 
 
 def deploy():
-    """distributes an archive to your web servers"""
-    path = do_pack()
-    if path is None:
+    """Creates and deploys an archive"""
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    f = do_deploy(path)
-    return f
+    return do_deploy(archive_path)
