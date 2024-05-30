@@ -4,7 +4,7 @@ from fabric.api import *
 import os.path
 
 env.user = 'ubuntu'
-env.hosts = ["54.236.8.114", "100.25.167.153"]
+env.hosts = ["100.25.167.169", "100.25.196.96"]
 env.key_filename = "~/.ssh/school"
 
 
